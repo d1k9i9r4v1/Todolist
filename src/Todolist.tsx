@@ -1,36 +1,37 @@
-    import React, { ChangeEvent, KeyboardEvent, useState } from "react";
-    import { FilterType } from "./App";
-    export type TaskType = {
-        id: string
-        title: string
-        isDone: boolean
+import React, { ChangeEvent, KeyboardEvent, useState } from "react";
+import { FilterType } from "./App";
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
+export type PropsType = {
+    tlId: string
+    title: string
+    tasks: Array<TaskType>
+    removeTask: (id: string, tlId: string) => void
+    removeTodolist: (tlId: string) => void
+    filterTasks: (value: FilterType, tlId: string) => void
+    filter: FilterType
+    addTask: (title: string, tlId: string) => void
+    changeTaskStatus: (id: string, isDone: boolean, tlId: string) => void
+}
+
+
+
+export function Todolist(props: PropsType) {
+
+    let [taskTitle, setTaskTitle] = useState("")
+    let [error, setError] = useState<null | string>(null)
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setError(null)
+        setTaskTitle(e.currentTarget.value)
     }
-    export type PropsType = {
-        tlId: string
-        title: string
-        tasks: Array<TaskType>
-        removeTask: (id: string, tlId: string) => void
-        removeTodolist: (tlId: string) => void
-        filterTasks: (value: FilterType, tlId: string) => void
-        filter: FilterType
-        addTask: (title: string, tlId: string) => void
-        changeTaskStatus: (id: string, isDone: boolean, tlId: string) => void
-    }
-
-
-    export function Todolist(props: PropsType) {
-
-        let [taskTitle, setTaskTitle] = useState("")
-        let [error, setError] = useState<null | string>(null)
-        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-            setError(null)
-            setTaskTitle(e.currentTarget.value)
-        }
-        const addTaskBtn = () => {
-            if (taskTitle.trim() !== "") {
-                props.addTask(taskTitle.trim(), props.tlId)
-                setTaskTitle("")
-            } else {
+    const addTaskBtn = () => {
+        if (taskTitle.trim() !== "") {
+            props.addTask(taskTitle.trim(), props.tlId)
+            setTaskTitle("")
+        } else {
             setError("Fill out the form")
         }
     }
@@ -50,11 +51,11 @@
     const FilterAllBtn = () => props.filterTasks("all", props.tlId)
     const FilterActiveBtn = () => props.filterTasks("active", props.tlId)
     const FilterCompleteBtn = () => props.filterTasks("complete", props.tlId)
-    const removeTlBtn =()=>props.removeTodolist(props.tlId)
+    const removeTlBtn = () => props.removeTodolist(props.tlId)
 
     return (
         <div>
-            <h3>{props.title}<button onClick={removeTlBtn}> x </button></h3>
+            <h3>{props.title} <button onClick={removeTlBtn}> x </button></h3>
             <div>
                 <input value={taskTitle}
                     onChange={onChangeHandler}
