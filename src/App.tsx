@@ -10,28 +10,24 @@ type TodolistType = {
 }
 
 function App() {
-
     function removeTask(id: string, tlId: string) {
-        let remainingTasks = tasks[tlId].filter((t)=>t.id !== id)
-        tasks[tlId] = remainingTasks
+        tasks[tlId] = tasks[tlId].filter((t)=>t.id!==id)
         setTasks({...tasks})
     }
-    function removeTodolist(tlId: string){
-        let remainingTodolists = todolists.filter((t)=>t.id !== tlId)
-        setTodolists(remainingTodolists)
-        delete tasks[tlId]
-        setTasks({...tasks})
+    function removeTodolist(tlId: string) {
+        todolists = todolists.filter((tl)=>tl.id!== tlId)
+        setTodolists([...todolists])
     }
     function filterTasks(value: FilterType, tlId: string) {
-        let todolist = todolists.find((t)=>t.id === tlId)
+        let todolist = todolists.find((tl)=>tl.id === tlId)
         if(todolist){
             todolist.filter = value
             setTodolists([...todolists])
         }
     }
     function addTask(title: string, tlId: string) {
-        let newTask = {id: v1(), title: title, isDone: false}
-        tasks[tlId] = [newTask, ...tasks[tlId]]
+        let task = {id: v1(), title: title, isDone: false}
+        tasks[tlId] = [task, ...tasks[tlId]]
         setTasks({...tasks})
     }
     function changeTaskStatus(id: string, isDone: boolean, tlId: string) {
@@ -41,6 +37,7 @@ function App() {
             setTasks({...tasks})
         }
     }
+
     let tlId1 = v1()
     let tlId2 = v1()
     let [todolists, setTodolists] = useState<Array<TodolistType>>([
@@ -59,7 +56,8 @@ function App() {
             { id: v1(), title: "JavaScript", isDone: true },
             { id: v1(), title: "React", isDone: false },
             { id: v1(), title: "Redux", isDone: false }
-        ]
+        ],
+
     })
 
     return (
@@ -68,22 +66,26 @@ function App() {
                 let tasksForTodolist = tasks[tl.id]
 
                 if (tl.filter === "active") {
-                    tasksForTodolist = tasksForTodolist.filter(t => !t.isDone)
+                    tasksForTodolist = tasksForTodolist.filter(tl => !tl.isDone)
                 }
                 if (tl.filter === "complete") {
-                    tasksForTodolist = tasksForTodolist.filter(t => t.isDone)
+                    tasksForTodolist = tasksForTodolist.filter(tl => tl.isDone)
                 }
-                return <Todolist
-                    key={tl.id}
-                    tlId={tl.id}
-                    title={tl.title}
-                    tasks={tasksForTodolist}
-                    removeTask={removeTask}
-                    removeTodolist={removeTodolist}
-                    filterTasks={filterTasks}
-                    filter={tl.filter}
-                    addTask={addTask}
-                    changeTaskStatus={changeTaskStatus} />
+
+                return (
+                    <Todolist
+                        key={tl.id}
+                        tlId={tl.id}
+                        title={tl.title}
+                        tasks={tasksForTodolist}
+                        removeTask={removeTask}
+                        removeTodolist={removeTodolist}
+                        filterTasks={filterTasks}
+                        filter={tl.filter}
+                        addTask={addTask}
+                        changeTaskStatus={changeTaskStatus}
+                    />
+                )
             })}
 
         </div>

@@ -52,10 +52,9 @@ export function Todolist(props: PropsType) {
     const FilterActiveBtn = () => props.filterTasks("active", props.tlId)
     const FilterCompleteBtn = () => props.filterTasks("complete", props.tlId)
     const removeTlBtn = () => props.removeTodolist(props.tlId)
-
     return (
         <div>
-            <h3>{props.title} <button onClick={removeTlBtn}> x </button></h3>
+            <h3>{props.title}<button onClick={removeTlBtn}> x </button></h3>
             <div>
                 <input value={taskTitle}
                     onChange={onChangeHandler}
